@@ -1,0 +1,52 @@
+---
+title: 'GHV4-EITI'
+execute:
+  echo: false
+  warning: false
+  message: false
+format: html
+---
+
+```{r}
+source("functions.R")
+```
+
+```{r,echo=FALSE}
+imgt_genes = 'IGHV4-EITI'
+
+alleles_on_ref=gene_sequence_names[grepl(imgt_genes, gene_sequence_names)]
+lenght_alleles_on_ref=length(alleles_on_ref)
+allele_on_genotype = unique(data_[grepl(imgt_genes, data_$allele), "allele"])
+novel_allele_on_genotype = setdiff(allele_on_genotype,alleles_on_ref)
+length_novel_allele_on_genotype = length(novel_allele_on_genotype)
+lenght_allele_on_genotype = length(setdiff(allele_on_genotype,novel_allele_on_genotype) )
+
+```
+
+## Allele appearnce
+
+The ASC `r imgt_genes` includes `r lenght_alleles_on_ref` alleles on the reference, `r lenght_allele_on_genotype` of them found in the genotype.
+
+There is `r length_novel_allele_on_genotype` novel allele for this ASC.
+
+For each allele we counted the number of appearances across the population.
+
+```{r}
+allele_appearance(data_, imgt_genes)%>%
+  layout(
+    autosize = F,
+    width = 800,
+    height = 600 
+  )
+```
+
+The graph below shows the allele-based individual genotype inference for this allele group.
+
+```{r}
+heatmap_alleles(data_, imgt_genes) %>%
+  layout(
+    autosize = F,
+    width = 800,
+    height = 600
+  )
+```

@@ -1,0 +1,75 @@
+---
+title: 'problems'
+execute:
+  echo: false
+  warning: false
+  message: false
+format: html
+---
+
+```{r}
+source("functions.R")
+```
+
+
+```{r}
+library(patchwork)
+
+plots_list <- list() 
+i=0
+#for(allele in unique(data_$allele)) {
+for(allele in unique(data_$allele)) {
+  df<-data_[data_$allele==allele,]
+  allele_data<-table(df$in_genomic)
+  if ("no" %in% names(allele_data)){
+    i=i+1
+    plot_data <- as.data.frame(allele_data)
+    p<-ggplot(df, aes(x = in_genomic, y =  after_stat(count), fill= in_genomic,text =
+                            paste("</br>Subject: ", subject,
+                                 "</br>lk: ", k_diff))) +
+    geom_bar() +
+      scale_fill_manual(values = c("yes" = "darkblue", "no" = "#74A089"),
+                        labels = c("found exact in assembly and repertoire",
+                                   "found in repertoire but not in assembly")) +
+      labs(fill = "") +
+      labs(title = allele,
+           x = "",
+           y = "Frequency") +
+      theme_minimal() +
+      theme(axis.text.x = element_blank())
+
+    p1<-ggplotly(p)
+    
+    plots_list[[i]] <- p1
+  }
+}
+#plots_per_row <- 3
+#plots_per_col <- ceiling(length(plots_list) / plots_per_row)
+
+# Combine all plots into a grid layout
+#combined_plot <- wrap_plots(plots_list, ncol = plots_per_row)
+
+```
+
+
+
+
+```{r}
+library(htmltools)
+library(plotly)
+
+# Assuming plots_list is a list of plotly plot objects
+html_divs <- lapply(plots_list, function(p) {
+  plot_widget <- plotly::plotly_build(p) %>% as_widget()
+  tags$div(style = "width: 33%;", plot_widget)
+})
+
+html_page <- tags$div(style = "display: flex; flex-wrap: wrap;", html_divs)
+
+```
+
+
+```{r}
+html_page
+```
+

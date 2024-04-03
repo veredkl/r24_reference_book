@@ -1,0 +1,32 @@
+project:
+  type: book
+  output-dir: "docs"
+  preview:
+    port: 4200
+    browser: true
+
+book:
+  title: "refrence book"
+  #contact: "gur.yaari@biu.ac.il"
+  sidebar:
+    style: docked
+    background: none
+    collapse-level: 1
+  search: true
+  repo-actions: [issue]
+  sharing: [twitter, facebook, linkedin]
+  page-navigation: true
+  chapters:
+    - index.qmd
+    - genotype.qmd
+    - novel_allele.qmd
+    - problems.qmd
+    - IGHV4-EITI.qmd
+    - IGHV1-ISRF.qmd
+format:
+  html:
+    theme: [Journal]
+    css: [style.css, index.css]
+    validate-yaml: false
+
+
