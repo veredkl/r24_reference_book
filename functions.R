@@ -6,7 +6,7 @@ pacman::p_load('dplyr', 'tidyr', 'htmltools', 'bbplot', 'scales', 'data.table', 
 
 
 load("2024-03-20_allele_igh_names.rda")
-load("new_data_web.rda")
+load("11_4_data_web.rda")
 
 allele_appearance <- function(data_, imgt_genes, chain = "IGH") {
   
@@ -37,7 +37,13 @@ allele_appearance <- function(data_, imgt_genes, chain = "IGH") {
   
   p1<-ggplotly(p, height = height, width = height)
   
-  p <- ggplot(data_, aes(x = imgt_call, y = frac_allele, text = paste0("Subject: ",subject))) +
+  p <- ggplot(data_, aes(x = imgt_call, y = frac_allele,text = paste0(paste("</br>genotyped_allele : ",genotyped_allele,
+                                                                            "</br>Subject: ", subject,
+                                                                            "</br>lk: ", k_diff,
+                                                                            "</br>in_genomic : ", in_genomic ,
+                                                                            "</br>alleles: ",alleles,
+                                                                            "</br>counts : ",counts ,
+                                                                            "</br>genotyped_alleles : ",genotyped_alleles)))) +
     geom_boxplot() + # This adds the box plot # Flip coordinates if you still want horizontal boxes
     geom_point(aes(color = in_genomic), position = position_jitter(width = 0.2), alpha = 1, size = 1.5) +
     # Specify colors for 'yes' and 'no'

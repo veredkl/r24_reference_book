@@ -1,5 +1,5 @@
 ---
-title: 'GHV4-EITI'
+title: 'IGHV4-EITI'
 execute:
   echo: false
   warning: false
@@ -15,21 +15,49 @@ source("functions.R")
 imgt_genes = 'IGHV4-EITI'
 
 alleles_on_ref=gene_sequence_names[grepl(imgt_genes, gene_sequence_names)]
-lenght_alleles_on_ref=length(alleles_on_ref)
+length_alleles_on_ref=length(alleles_on_ref)
 allele_on_genotype = unique(data_[grepl(imgt_genes, data_$allele), "allele"])
 novel_allele_on_genotype = setdiff(allele_on_genotype,alleles_on_ref)
 length_novel_allele_on_genotype = length(novel_allele_on_genotype)
-lenght_allele_on_genotype = length(setdiff(allele_on_genotype,novel_allele_on_genotype) )
+length_allele_on_genotype = length(setdiff(allele_on_genotype,novel_allele_on_genotype) )
 
 ```
 
-## Allele appearnce
 
-The ASC `r imgt_genes` includes `r lenght_alleles_on_ref` alleles on the reference, `r lenght_allele_on_genotype` of them found in the genotype.
+```{r}
+novel = ""
 
-There is `r length_novel_allele_on_genotype` novel allele for this ASC.
+if(length_novel_allele_on_genotype == 0){
+  novel = "No novel alleles were found for this ASC."
+} else if(length_novel_allele_on_genotype == 1){
+  novel = "one novel allele was found for this ASC."
+}else {
+   novel = paste0(length_novel_allele_on_genotype, " novel alleles were found for this ASC.")
+}
+```
 
-For each allele we counted the number of appearances across the population.
+
+```{r}
+novel = ""
+
+if(length_novel_allele_on_genotype == 0){
+  novel = "No novel alleles were found for this ASC."
+} else if(length_novel_allele_on_genotype == 1){
+  novel = "one novel allele was found for this ASC."
+}else {
+   novel = paste0(length_novel_allele_on_genotype, " novel alleles were found for this ASC.")
+}
+```
+
+## Allele Appearnces
+
+
+The ASC `r imgt_genes` includes `r length_alleles_on_ref` alleles on the reference, `r length_allele_on_genotype` of them found in the genotype.<br>
+`r novel`
+
+For each allele, we counted the number of appearances across the population and its usage in the repertoire of each subject that has this allele. 
+
+
 
 ```{r}
 allele_appearance(data_, imgt_genes)%>%

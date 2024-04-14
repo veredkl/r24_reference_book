@@ -1,5 +1,5 @@
 ---
-title: "novel_allele"
+title: "novel allele"
 execute:
   echo: false
   warning: false
@@ -18,7 +18,7 @@ novel_data <- data_ %>%
 
 summary_data <- novel_data %>%
   group_by(allele, k_diff) %>%
-  summarise(count = n(), subject =subject)
+  summarise(count = n(), subject =subject , genotyped_allele = genotyped_allele,in_genomic = in_genomic, alleles = alleles, counts=counts,genotyped_alleles = genotyped_alleles)
 
 summary_data <- summary_data %>%
   mutate(prefix = sub("_.*", "", allele))
@@ -44,7 +44,12 @@ label_colors <- c("black", "red")
 ```
 
 ```{r}
-p<-ggplot(summary_data, aes(x = allele, y = count, text = paste0("Subject: ",subject), fill = cut(k_diff, breaks = color_breaks))) +
+p<-ggplot(summary_data, aes(x = allele, y = count, text = paste0(paste("</br>genotyped_allele : ",genotyped_allele,                                               "</br>Subject: ", subject,
+                           "</br>lk: ", k_diff,
+                           "</br>in_genomic : ", in_genomic ,
+                           "</br>alleles: ",alleles,
+                           "</br>counts : ",counts ,
+                           "</br>genotyped_alleles : ",genotyped_alleles)), fill = cut(k_diff, breaks = color_breaks))) +
   geom_bar(stat = "identity") +
   labs(title = "",
        x = "novel allele",
@@ -54,7 +59,12 @@ p<-ggplot(summary_data, aes(x = allele, y = count, text = paste0("Subject: ",sub
   scale_fill_manual(values = color_palette, limits = levels(cut(summary_data$k_diff, breaks = color_breaks))) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1,color =  ifelse(u$alternating_color == 1, label_colors[2], label_colors[1])))
 
-ggplotly(p)
+ggplotly(p, tooltip = "text") %>%
+  layout(
+    autosize = F,
+    width = 800,
+    height = 600
+  )
 ```
 
 
